@@ -1,0 +1,4 @@
+DISPLAY_WIDTH = 950
+DISPLAY_HEIGHT = 750
+FPS = 60
+BACKGROUND_COLOR = (0, 0, 0, 1)  # Black background

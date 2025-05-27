@@ -92,7 +92,7 @@ def main():
             if not auto_mode:
                 if event.type == pygame.KEYDOWN:
                 # Arrow keys to switch views
-                    if event.key == pygame.K_RIGHT:
+                    if event.key == pygame.K_RIGHT or event.key == pygame.K_d or event.key == pygame.K_w:
                         view_index = (view_index + 1) % len(manual_views)
                         current_view = manual_views[view_index]
                         target_camera_distance = current_view["zoom"]
@@ -100,26 +100,14 @@ def main():
                         target_rot_y = current_view["rot_y"]
                         print(f"Switched to: {current_view['name']}")
                     
-                    elif event.key == pygame.K_LEFT:
+                    elif event.key == pygame.K_LEFT or event.key == pygame.K_a  or event.key == pygame.K_s:
                         view_index = (view_index - 1) % len(manual_views)
                         current_view = manual_views[view_index]
                         target_camera_distance = current_view["zoom"]
                         target_rot_x = current_view["rot_x"]
                         target_rot_y = current_view["rot_y"]
                         print(f"Switched to: {current_view['name']}")
-
-                    # WASD keys for camera movement
-                    if event.key == pygame.K_d:
-                        position.x += 0.1  # Move camera to the right
-                    elif event.key == pygame.K_a:
-                        position.x -= 0.1  # Move camera to the left
-                    elif event.key == pygame.K_w:
-                        position.y += 0.1  # Move camera up
-                    elif event.key == pygame.K_s:
-                        position.y -= 0.1  # Move camera down
-                
-        
-
+                    
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 4:
                         target_camera_distance = max(1.0, target_camera_distance - 0.5)

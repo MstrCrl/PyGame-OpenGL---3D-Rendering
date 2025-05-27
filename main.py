@@ -89,23 +89,36 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_p:
-                view_info = f"Zoom: {camera_distance:.2f}, rot_x: {rot_x:.2f}, rot_y: {rot_y:.2f}"
-                print(view_info)
-                with open("view_log.txt", "a") as log:
-                    log.write(view_info + "\n")
-
             if not auto_mode:
                 if event.type == pygame.KEYDOWN:
+                # Arrow keys to switch views
                     if event.key == pygame.K_RIGHT:
                         view_index = (view_index + 1) % len(manual_views)
+                        current_view = manual_views[view_index]
+                        target_camera_distance = current_view["zoom"]
+                        target_rot_x = current_view["rot_x"]
+                        target_rot_y = current_view["rot_y"]
+                        print(f"Switched to: {current_view['name']}")
+                    
                     elif event.key == pygame.K_LEFT:
                         view_index = (view_index - 1) % len(manual_views)
-                    current_view = manual_views[view_index]
-                    target_camera_distance = current_view["zoom"]
-                    target_rot_x = current_view["rot_x"]
-                    target_rot_y = current_view["rot_y"]
-                    print(f"Switched to: {current_view['name']}")
+                        current_view = manual_views[view_index]
+                        target_camera_distance = current_view["zoom"]
+                        target_rot_x = current_view["rot_x"]
+                        target_rot_y = current_view["rot_y"]
+                        print(f"Switched to: {current_view['name']}")
+
+                    # WASD keys for camera movement
+                    if event.key == pygame.K_d:
+                        position.x += 0.1  # Move camera to the right
+                    elif event.key == pygame.K_a:
+                        position.x -= 0.1  # Move camera to the left
+                    elif event.key == pygame.K_w:
+                        position.y += 0.1  # Move camera up
+                    elif event.key == pygame.K_s:
+                        position.y -= 0.1  # Move camera down
+                
+        
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 4:

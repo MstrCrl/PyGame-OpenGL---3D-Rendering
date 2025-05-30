@@ -190,17 +190,26 @@ def main():
                 last_mouse_pos = (x, y)
 
         # Auto mode switching of views
-        if auto_mode and (current_time - last_auto_switch_time) > auto_switch_intervals[auto_view_index]:
-            auto_view_index += 1
-            if auto_view_index >= len(auto_switch_intervals):
+        # Auto mode switching of views with bounds check
+        if auto_mode:
+            if auto_view_index < len(auto_switch_intervals):
+                if (current_time - last_auto_switch_time) > auto_switch_intervals[auto_view_index]:
+                    auto_view_index += 1
+                    if auto_view_index >= len(auto_switch_intervals):
+                        auto_mode = False
+                        auto_mode_locked = False  # Unlock manual controls now
+                        view_index = 0
+                        print("Auto mode ended, manual control enabled.")
+                    else:
+                        set_view(views[auto_view_index])
+                        print(f"Auto-switched to: {current_view['name']}")
+                    last_auto_switch_time = current_time
+            else:
+                # Safety fallback, in case auto_view_index got too large
                 auto_mode = False
-                auto_mode_locked = False  # Unlock manual controls now
+                auto_mode_locked = False
                 view_index = 0
                 print("Auto mode ended, manual control enabled.")
-            else:
-                set_view(views[auto_view_index])
-                print(f"Auto-switched to: {current_view['name']}")
-            last_auto_switch_time = current_time
 
         # Render background video
         glClear(GL_COLOR_BUFFER_BIT)
@@ -288,8 +297,8 @@ views = [
     {"name": "OUTER OUTPOST", "zoom": 8.5, "rot_x": -58.0, "rot_y": -217.5},
     {"name": "INNER GATE", "zoom": 5.5, "rot_x": -30.5, "rot_y": -89.0},
     {"name": "INNER OUTPOST", "zoom": 7.0, "rot_x": -24.5, "rot_y": -153.0},
-    {"name": "CASTLE TOP VIEW", "zoom": 10.5, "rot_x": -13.0, "rot_y": -449.0},
     {"name": "CASTLE MAIN VIEW", "zoom": 9.0, "rot_x": -45.0, "rot_y": -90.0},
+    {"name": "CASTLE TOP VIEW", "zoom": 10.5, "rot_x": -13.0, "rot_y": -449.0},
 ]
 manual_views = views[1:]  # Skip "FAR FAR" in manual mode
 

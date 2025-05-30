@@ -81,8 +81,8 @@ def main():
     zoom_feedback_cooldown = 500  # ms cooldown for beep/print
     last_zoom_feedback_time = 0
 
-    # Adjusted auto_switch_intervals to have one less than number of views
-    auto_switch_intervals = [2500] * 3 + [1500] * 5 + [1125] * 11  # 19 intervals
+    # auto_switch_intervals length should be one less than views length
+    auto_switch_intervals = [2500] * 3 + [1500] * 5 + [1125] * 11  # 19 intervals for 20 views
     last_auto_switch_time = pygame.time.get_ticks()
 
     # Load beep sound or fallback to None
@@ -116,6 +116,17 @@ def main():
                 if event.key == pygame.K_m:
                     auto_mode = not auto_mode
                     print(f"Auto mode toggled to: {'ON' if auto_mode else 'OFF'}")
+
+                    if auto_mode:
+                        # If first auto mode run, start from 0 (FAR FAR),
+                        # else start from 1 (skip FAR FAR)
+                        if auto_view_index == 0:
+                            auto_view_index = 0
+                        else:
+                            auto_view_index = 1
+                        set_view(views[auto_view_index])
+                        last_auto_switch_time = current_time
+                        auto_mode_locked = False  # allow manual inputs after toggle
 
                 # Adjust lerp speed with '+' and '-'
                 elif event.key in (pygame.K_PLUS, pygame.K_KP_PLUS, pygame.K_EQUALS):
@@ -190,17 +201,20 @@ def main():
 
         # Auto mode switching of views with safe bounds checking
         if auto_mode:
-            if auto_view_index < len(auto_switch_intervals) and (current_time - last_auto_switch_time) > auto_switch_intervals[auto_view_index]:
-                auto_view_index += 1
-                if auto_view_index >= len(auto_switch_intervals):
-                    auto_mode = False
-                    auto_mode_locked = False  # Unlock manual controls now
-                    view_index = 0
-                    print("Auto mode ended, manual control enabled.")
-                else:
-                    set_view(views[auto_view_index])
-                    print(f"Auto-switched to: {current_view['name']}")
-                last_auto_switch_time = current_time
+            if auto_view_index < len(auto_switch_intervals):
+                elapsed = current_time - last_auto_switch_time
+                interval = auto_switch_intervals[auto_view_index]
+                if elapsed > interval:
+                    auto_view_index += 1
+                    if auto_view_index >= len(auto_switch_intervals):
+                        auto_mode = False
+                        auto_mode_locked = False  # Unlock manual controls now
+                        view_index = 0
+                        print("Auto mode ended, manual control enabled.")
+                    else:
+                        set_view(views[auto_view_index])
+                        print(f"Auto-switched to: {current_view['name']}")
+                    last_auto_switch_time = current_time
 
         # Render background video
         glClear(GL_COLOR_BUFFER_BIT)
@@ -257,7 +271,8 @@ def main():
 
         pygame.display.flip()
         clock.tick(config.FPS)
-        
+
+
 # Views (FAR FAR is auto-only)
 views = [
     {"name": "FAR FAR", "zoom": 107.5, "rot_x": -13.0, "rot_y": -449.0},  # AUTO ONLY

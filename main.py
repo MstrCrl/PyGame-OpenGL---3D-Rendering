@@ -81,7 +81,8 @@ def main():
     zoom_feedback_cooldown = 500  # ms cooldown for beep/print
     last_zoom_feedback_time = 0
 
-    auto_switch_intervals = [2500] * 3 + [1500] * 5 + [1125] * 11
+    # Adjusted auto_switch_intervals to have one less than number of views
+    auto_switch_intervals = [2500] * 3 + [1500] * 5 + [1125] * 11  # 19 intervals
     last_auto_switch_time = pygame.time.get_ticks()
 
     # Load beep sound or fallback to None
@@ -155,7 +156,6 @@ def main():
             # Mouse wheel zoom and drag rotation
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 4:
-                    # Zoom in with feedback
                     if target_camera_distance > zoom_min:
                         target_camera_distance = max(zoom_min, target_camera_distance - 0.5)
                     else:
@@ -165,7 +165,6 @@ def main():
                                 beep_sound.play()
                             last_zoom_feedback_time = current_time
                 elif event.button == 5:
-                    # Zoom out with feedback
                     if target_camera_distance < zoom_max:
                         target_camera_distance = min(zoom_max, target_camera_distance + 0.5)
                     else:
@@ -189,27 +188,19 @@ def main():
                 target_rot_x += dy * 0.5
                 last_mouse_pos = (x, y)
 
-        # Auto mode switching of views
-        # Auto mode switching of views with bounds check
+        # Auto mode switching of views with safe bounds checking
         if auto_mode:
-            if auto_view_index < len(auto_switch_intervals):
-                if (current_time - last_auto_switch_time) > auto_switch_intervals[auto_view_index]:
-                    auto_view_index += 1
-                    if auto_view_index >= len(auto_switch_intervals):
-                        auto_mode = False
-                        auto_mode_locked = False  # Unlock manual controls now
-                        view_index = 0
-                        print("Auto mode ended, manual control enabled.")
-                    else:
-                        set_view(views[auto_view_index])
-                        print(f"Auto-switched to: {current_view['name']}")
-                    last_auto_switch_time = current_time
-            else:
-                # Safety fallback, in case auto_view_index got too large
-                auto_mode = False
-                auto_mode_locked = False
-                view_index = 0
-                print("Auto mode ended, manual control enabled.")
+            if auto_view_index < len(auto_switch_intervals) and (current_time - last_auto_switch_time) > auto_switch_intervals[auto_view_index]:
+                auto_view_index += 1
+                if auto_view_index >= len(auto_switch_intervals):
+                    auto_mode = False
+                    auto_mode_locked = False  # Unlock manual controls now
+                    view_index = 0
+                    print("Auto mode ended, manual control enabled.")
+                else:
+                    set_view(views[auto_view_index])
+                    print(f"Auto-switched to: {current_view['name']}")
+                last_auto_switch_time = current_time
 
         # Render background video
         glClear(GL_COLOR_BUFFER_BIT)
@@ -266,18 +257,7 @@ def main():
 
         pygame.display.flip()
         clock.tick(config.FPS)
-
-    # Cleanup resources
-    cap.release()
-    glDeleteVertexArrays(1, [vao_castle, bg_VAO])
-    glDeleteBuffers(1, [ebo_castle, bg_VBO])
-    glDeleteTextures(1, [tex_castle, video_texture])
-    glDeleteProgram(shader)
-    glDeleteProgram(bg_shader)
-    pygame.mixer.music.stop()
-    pygame.quit()
-
-
+        
 # Views (FAR FAR is auto-only)
 views = [
     {"name": "FAR FAR", "zoom": 107.5, "rot_x": -13.0, "rot_y": -449.0},  # AUTO ONLY

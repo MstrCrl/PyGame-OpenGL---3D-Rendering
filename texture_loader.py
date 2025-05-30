@@ -3,7 +3,7 @@ from PIL import Image
 import os
 def load_texture(path):
     abs_path = os.path.abspath(path)
-    print("Loading texture from:", abs_path)
+    #print("Loading texture from:", abs_path)
 
     image = Image.open(abs_path).convert("RGBA")
     image = image.transpose(Image.FLIP_TOP_BOTTOM)

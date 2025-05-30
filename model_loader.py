@@ -9,9 +9,9 @@ def create_textured_object(vertex_path, index_path):
     for line in vertex_lines:
         if line.strip() and not line.startswith("#"):
             line = line.strip()
-            if "," in line:  # for dragon format
+            if "," in line:  
                 parts = list(map(float, line.split(",")))
-            else:  # for wings format
+            else:  
                 parts = list(map(float, line.split()))
             vertices.extend(parts)
     vertices = np.array(vertices, dtype=np.float32)

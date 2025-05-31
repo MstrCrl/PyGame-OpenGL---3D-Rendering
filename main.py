@@ -1,15 +1,14 @@
 import pygame
 from pygame.locals import *          # Pygame constants like QUIT, KEYDOWN, etc.
 from OpenGL.GL import *              # OpenGL functions
-import glm                          # OpenGL Mathematics library for matrix/vector math
-import config                       # Your config module for constants like window size, colors, FPS
-import cv2                         # OpenCV for video capture
-import random                      # For random view switching
-from model_loader import create_textured_object    # Load model data for OpenGL
-from texture_loader import load_texture            # Load textures for OpenGL
-from textured_shader import create_shader_program  # Create OpenGL shader program for textured objects
-from bg_loader import create_bg_shader_program, create_bg_quad, init_video_texture, update_video_texture
-                                                    # Utilities for background video rendering using OpenGL
+import glm                           # OpenGL Mathematics library for matrix/vector math
+import config                        # Your config module for constants like window size, colors, FPS
+import cv2                           # OpenCV for video capture
+import random                        # For random view switching
+from loader.model_loader import create_textured_object    # Load model data for OpenGL
+from loader.texture_loader import load_texture            # Load textures for OpenGL
+from loader.textured_shader import create_shader_program  # Create OpenGL shader program for textured objects
+from loader.bg_loader import create_bg_shader_program, create_bg_quad, init_video_texture, update_video_texture # Utilities for background video rendering using OpenGL
 
 
 def main():
@@ -25,14 +24,14 @@ def main():
     pygame.display.set_icon(icon_surface)
 
     glEnable(GL_DEPTH_TEST)                  # Enable depth testing so nearer objects occlude farther ones
-    glClearColor(*config.BACKGROUND_COLOR)  # Set the clear color for the background (RGBA)
+    glClearColor(*config.BACKGROUND_COLOR)   # Set the clear color for the background (RGBA)
 
     # Setup video capture for background video with OpenCV
-    cap = cv2.VideoCapture("source/bg.mp4")
+    cap = cv2.VideoCapture("source/bg5.mp4")
 
     video_texture = init_video_texture()            # Create OpenGL texture for video frames
     bg_shader = create_bg_shader_program()          # Create shader program for rendering video background quad
-    bg_VAO, bg_VBO = create_bg_quad()                # Create vertex array and buffer for fullscreen quad to render video
+    bg_VAO, bg_VBO = create_bg_quad()               # Create vertex array and buffer for fullscreen quad to render video
 
     # Load 3D model and create shader program for it
     shader = create_shader_program()

@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *          # Pygame constants like QUIT, KEYDOWN, etc.
 from OpenGL.GL import *              # OpenGL functions
 import glm                           # OpenGL Mathematics library for matrix/vector math
-import config                        # Your config module for constants like window size, colors, FPS
+from loader import config            # config module for constants like window size, colors, FPS
 import cv2                           # OpenCV for video capture
 import random                        # For random view switching
 from loader.model_loader import create_textured_object    # Load model data for OpenGL

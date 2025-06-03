@@ -14,11 +14,11 @@ from loader.bg_loader import create_bg_shader_program, create_bg_quad, init_vide
 def main():
     pygame.init()            # Initialize Pygame modules (video, events)
     pygame.mixer.init()      # Initialize Pygame sound mixer for audio playback
-
+    pygame.time.wait(3000)
     display = (config.DISPLAY_WIDTH, config.DISPLAY_HEIGHT)  # Get display size from config
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)     # Create OpenGL-capable window with double buffering
+    
     # Set window title and icon
-    pygame.time.wait(3000)
     pygame.display.set_caption("Minecraft 3D Castle <3")
     icon_surface = pygame.image.load("source/image.png")     # Load image for window icon
     pygame.display.set_icon(icon_surface)

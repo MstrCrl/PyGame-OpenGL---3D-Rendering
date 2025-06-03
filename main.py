@@ -18,6 +18,7 @@ def main():
     display = (config.DISPLAY_WIDTH, config.DISPLAY_HEIGHT)  # Get display size from config
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)     # Create OpenGL-capable window with double buffering
     # Set window title and icon
+    pygame.time.wait(3000)
     pygame.display.set_caption("Minecraft 3D Castle <3")
     icon_surface = pygame.image.load("source/image.png")     # Load image for window icon
     pygame.display.set_icon(icon_surface)
@@ -126,6 +127,9 @@ def main():
 
             if event.type == pygame.KEYDOWN:
                 # Toggle auto mode on/off with 'm' key
+                if event.key == pygame.K_p:
+                    view_info = f"Zoom: {camera_distance:.2f}, rot_x: {rot_x:.2f}, rot_y: {rot_y:.2f}"
+                    print(view_info)  # Print to terminal
                 if event.key == pygame.K_m:
                     auto_mode = not auto_mode
                     print(f"Auto mode toggled to: {'ON' if auto_mode else 'OFF'}")
@@ -321,16 +325,16 @@ views = [
     {"name": "BLACKSMITH", "zoom": 5.5, "rot_x": -54.5, "rot_y": -24.0},
     {"name": "PEASANT HUT", "zoom": 6.5, "rot_x": -52.5, "rot_y": 7.5},
     {"name": "FARM", "zoom": 7.0, "rot_x": -52.5, "rot_y": 26.5},
-    {"name": "WINDMILL", "zoom": 8.0, "rot_x": -50.5, "rot_y": 18.5},
+    {"name": "RED CARPET ENTRANCE", "zoom": 6.0, "rot_x": -37.50, "rot_y": 53.50},
+    {"name": "DINING HALL", "zoom": 6.50, "rot_x": -32.00, "rot_y": 70.50},
     {"name": "UPPER CLASS RESIDENTIAL", "zoom": 7.0, "rot_x": -49.5, "rot_y": -138.5},
     {"name": "POND", "zoom": 7.0, "rot_x": -62.5, "rot_y": -142.5},
     {"name": "CHAPPEL", "zoom": 7.5, "rot_x": -49.5, "rot_y": -218.5},
-    {"name": "OUTER OUTPOST", "zoom": 8.5, "rot_x": -58.0, "rot_y": -217.5},
+    {"name": "OUTER OUTPOST", "zoom": 6, "rot_x": -58.0, "rot_y": -211.00},
     {"name": "INNER GATE", "zoom": 5.5, "rot_x": -30.5, "rot_y": -89.0},
     {"name": "INNER OUTPOST", "zoom": 7.0, "rot_x": -24.5, "rot_y": -153.0},
     {"name": "CASTLE MAIN VIEW", "zoom": 9.0, "rot_x": -45.0, "rot_y": -90.0},
-    {"name": "CASTLE TOP VIEW", "zoom": 10.5, "rot_x": -13.0, "rot_y": -449.0},
-]
+    ]
 
 manual_views = views[1:]  # Exclude the first "FAR FAR" view from manual mode navigation
 

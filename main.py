@@ -17,7 +17,6 @@ def main():
 
     display = (config.DISPLAY_WIDTH, config.DISPLAY_HEIGHT)  # Get display size from config
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)     # Create OpenGL-capable window with double buffering
-
     # Set window title and icon
     pygame.display.set_caption("Minecraft 3D Castle <3")
     icon_surface = pygame.image.load("source/image.png")     # Load image for window icon

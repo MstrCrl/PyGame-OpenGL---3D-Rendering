@@ -14,7 +14,7 @@ from loader.bg_loader import create_bg_shader_program, create_bg_quad, init_vide
 def main():
     pygame.init()            # Initialize Pygame modules (video, events)
     pygame.mixer.init()      # Initialize Pygame sound mixer for audio playback
-    pygame.time.wait(3000)
+    
     display = (config.DISPLAY_WIDTH, config.DISPLAY_HEIGHT)  # Get display size from config
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)     # Create OpenGL-capable window with double buffering
     
